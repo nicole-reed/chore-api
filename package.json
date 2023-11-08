@@ -3,14 +3,18 @@
     "lint": "eslint -c .eslintrc src/**/*",
     "start": "node dist/app.js",
     "build": "tsc && npx ts-node ./createDistPackageJSON.ts",
-    "deploy": "npm run build && gcloud run deploy choreme --project=choreme --region=us-central1 --port=8080 --source=./dist --allow-unauthenticated"
+    "deploy": "npm run build && gcloud run deploy choreme --project=choreme --region=us-central1 --port=8080 --service-account=choreme-api@choreme.iam.gserviceaccount.com --source=./dist --allow-unauthenticated"
   },
   "dependencies": {
+    "@google-cloud/cloud-sql-connector": "^1.1.0",
+    "@google-cloud/secret-manager": "^5.0.1",
     "express": "^4.18.2",
-    "typescript": "^5.2.2"
+    "knex": "^3.0.1",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.20",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }
