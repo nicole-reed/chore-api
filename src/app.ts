@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { getApiKey } from './services/apiKey.service';
-import { getCars } from './services/cars.service';
+import { getAdmins } from './services/admins.service';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -30,10 +30,10 @@ app.get('/', (req, res) => {
   res.send('hello universe')
 });
 
-app.get('/cars', async (req, res) => {
+app.get('/admins', async (req, res) => {
   try {
-    const cars = await getCars()
-    res.status(200).json({ cars })
+    const admins = await getAdmins()
+    res.status(200).json({ admins })
   } catch (error) {
     console.log(error)
     res.status(500).send()
