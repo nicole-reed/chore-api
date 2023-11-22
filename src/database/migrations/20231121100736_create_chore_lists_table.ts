@@ -4,12 +4,15 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("chore_lists", (table) => {
         table.uuid("chore_list_id").defaultTo(knex.fn.uuid()).primary();
-        table.string("admin_id").notNullable();
+        table.uuid("admin_id");
+        table.foreign("admin_id").references("admins.admin_id");
         table.string("title").notNullable();
-        table.string("assigned_to").notNullable();
+        table.uuid("assigned_to");
+        table.foreign("assigned_to").references("users.user_id");
         table.date("deadline");
         table.string("value");
-        table.boolean("status").notNullable();
+        table.string("notes");
+        table.boolean("complete").notNullable().defaultTo(false);
     });
 }
 
@@ -17,4 +20,3 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
     await knex.schema.dropTable("chore_lists");
 }
-

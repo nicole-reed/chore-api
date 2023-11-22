@@ -1,8 +1,8 @@
-import { getDbConnection } from "../database/knex.service"
+import { getDb } from "../database/knex.service"
 
 export const getUsers = async () => {
-    const dbConnection = await getDbConnection()
-    const users = await dbConnection.select('*').from('users')
+    const db = await getDb()
+    const users = await db.select('*').from('users')
 
     return users
 }
