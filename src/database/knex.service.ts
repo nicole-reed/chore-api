@@ -1,13 +1,13 @@
-import { getDbPassword } from "../services/dbCreds.service";
+import { getDbPassword, getDbUser } from "../services/dbCreds.service";
 import { Knex, knex } from 'knex';
 
-let connection: Knex | undefined;
+let db: Knex | undefined;
 
-export const getDbConnection = async () => {
-    if (!connection) {
-        connection = await connectToDb();
+export const getDb = async () => {
+    if (!db) {
+        db = await connectToDb();
     }
-    return connection
+    return db
 };
 
 export const getKnexConfig = (): Knex.Config => {
@@ -15,7 +15,8 @@ export const getKnexConfig = (): Knex.Config => {
         client: 'pg',
         connection: async () => {
             const password = await getDbPassword()
-            return { user: 'xjeiwdgy', password, host: 'suleiman.db.elephantsql.com' }
+            const user = await getDbUser()
+            return { user, password, host: 'suleiman.db.elephantsql.com' }
         }
     }
 };
