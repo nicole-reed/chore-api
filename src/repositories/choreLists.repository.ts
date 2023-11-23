@@ -8,3 +8,5 @@ export const getChoreLists = async (): Promise<ChoreList[]> => {
 
     return z.array(choreListSchema).parse(choreLists)
 }
+
+export const choreListsRepository = { getChoreLists };
