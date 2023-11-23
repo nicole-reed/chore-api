@@ -9,3 +9,5 @@ export const getAdmins = async (): Promise<Admin[]> => {
 
     return z.array(adminSchema).parse(admins)
 }
+
+export const adminsRepository = { getAdmins };

@@ -8,3 +8,5 @@ export const getUsers = async (): Promise<User[]> => {
 
     return z.array(userSchema).parse(users)
 }
+
+export const usersRepository = { getUsers };

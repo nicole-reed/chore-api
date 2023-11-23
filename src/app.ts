@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { getApiKey } from './services/apiKey.service';
-import { getAdmins } from './services/admins.service';
-import { getUsers } from './services/users.service';
-import { getChoreLists } from './services/choreLists.service';
-import { getChores } from './services/chores.service';
+import { getUsers } from './handlers/getUsers';
+import { getAdmins } from './handlers/getAdmins';
+import { getChores } from './handlers/getChores';
+import { getChoreLists } from './handlers/getChoreLists';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -33,46 +33,13 @@ app.get('/', (req, res) => {
   res.send('hello universe')
 });
 
-app.get('/admins', async (req, res) => {
-  try {
-    const admins = await getAdmins()
-    res.status(200).json({ admins })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send()
-  }
-});
+app.get('/users', getUsers);
 
-app.get('/users', async (req, res) => {
-  try {
-    const users = await getUsers()
-    res.status(200).json({ users })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send()
-  }
-});
+app.get('/admins', getAdmins);
 
-app.get('/choreLists', async (req, res) => {
-  try {
-    const choreLists = await getChoreLists()
-    res.status(200).json({ choreLists })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send()
-  }
-});
+app.get('/choreLists', getChoreLists);
 
-app.get('/chores', async (req, res) => {
-  try {
-    const chores = await getChores()
-    res.status(200).json({ chores })
-  } catch (error) {
-    console.log(error)
-    res.status(500).send()
-  }
-});
-
+app.get('/chores', getChores);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
