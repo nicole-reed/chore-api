@@ -1,5 +1,5 @@
 import { getDb } from "../database/knex.service"
-import { Admin, adminSchema } from "../models/admin"
+import { Admin, adminSchema, createAdminRequestSchema } from "../models/admin"
 import { z } from "zod";
 
 
@@ -18,4 +18,11 @@ export const getAdminById = async (admin_id: string): Promise<Admin> => {
     return adminSchema.parse(admin[0])
 }
 
-export const adminsRepository = { getAdmins, getAdminById };
+export const createAdmin = async (name: string, email: string): Promise<Admin> => {
+    const db = await getDb()
+    const admin: unknown[] = await db('admins').returning(['admin_id', 'name', 'email']).insert({ name, email })
+
+    return adminSchema.parse(admin[0])
+}
+
+export const adminsRepository = { getAdmins, getAdminById, createAdmin };

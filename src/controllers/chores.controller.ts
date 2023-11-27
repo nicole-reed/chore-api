@@ -1,4 +1,4 @@
-import { getChoreByIdRequestSchema } from "../models/chore";
+import { createChoreRequestSchema, getChoreByIdRequestSchema } from "../models/chore";
 import { HttpResponse } from "../models/httpResponse";
 import { choresRepository } from "../repositories/chores.repository";
 
@@ -23,4 +23,19 @@ export const getChoreById = async (request: unknown): Promise<HttpResponse> => {
     };
 };
 
-export const choresController = { getChores, getChoreById };
+export const createChore = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = createChoreRequestSchema.parse(request)
+    const input = {
+        admin_id: validatedRequest.body.admin_id,
+        title: validatedRequest.body.title,
+        status: validatedRequest.body.status
+    }
+    const chore = await choresRepository.createChore(input)
+
+    return {
+        body: chore,
+        status: 200
+    }
+}
+
+export const choresController = { getChores, getChoreById, createChore };
