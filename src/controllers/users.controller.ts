@@ -1,5 +1,5 @@
 import { HttpResponse } from "../models/httpResponse";
-import { getUserByIdRequestSchema } from "../models/user";
+import { createUserRequestSchema, getUserByIdRequestSchema } from "../models/user";
 import { usersRepository } from "../repositories/users.repository";
 
 export const getUsers = async (): Promise<HttpResponse> => {
@@ -22,4 +22,15 @@ export const getUserById = async (request: unknown): Promise<HttpResponse> => {
     };
 };
 
-export const usersController = { getUsers, getUserById };
+export const createUser = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = createUserRequestSchema.parse(request)
+    const { admin_id, name, email } = validatedRequest.body
+    const user = await usersRepository.createUser(admin_id, name, email)
+
+    return {
+        body: user,
+        status: 200
+    }
+}
+
+export const usersController = { getUsers, getUserById, createUser };

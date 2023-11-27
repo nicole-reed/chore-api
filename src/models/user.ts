@@ -13,4 +13,12 @@ export const getUserByIdRequestSchema = z.object({
     })
 });
 
+export const createUserRequestSchema = z.object({
+    body: z.object({
+        admin_id: z.string(),
+        name: z.string(),
+        email: z.string()
+    })
+});
+
 export type User = z.infer<typeof userSchema>

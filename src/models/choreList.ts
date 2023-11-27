@@ -17,4 +17,16 @@ export const getChoreListByIdRequestSchema = z.object({
     })
 });
 
+export const createChoreListRequestSchema = z.object({
+    body: z.object({
+        admin_id: z.string(),
+        title: z.string(),
+        assigned_to: z.string().optional(),
+        deadline: z.date().optional(),
+        value: z.string().optional(),
+        notes: z.string().optional(),
+        complete: z.boolean().default(false)
+    })
+});
+
 export type ChoreList = z.infer<typeof choreListSchema>

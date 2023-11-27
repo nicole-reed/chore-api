@@ -1,5 +1,5 @@
 
-import { getChoreListByIdRequestSchema } from "../models/choreList";
+import { createChoreListRequestSchema, getChoreListByIdRequestSchema } from "../models/choreList";
 import { HttpResponse } from "../models/httpResponse";
 import { choreListsRepository } from "../repositories/choreLists.repository";
 
@@ -21,7 +21,21 @@ export const getChoreListById = async (request: unknown): Promise<HttpResponse> 
     return {
         body: choreList,
         status: 200
+    };
+};
+
+export const createChoreList = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = createChoreListRequestSchema.parse(request)
+    const input = {
+        admin_id: validatedRequest.body.admin_id,
+        title: validatedRequest.body.title
+    }
+    const choreList = await choreListsRepository.createChoreList(input)
+
+    return {
+        body: choreList,
+        status: 200
     }
 }
 
-export const choreListsController = { getChoreLists, getChoreListById };
+export const choreListsController = { getChoreLists, getChoreListById, createChoreList };

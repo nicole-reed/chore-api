@@ -8,6 +8,11 @@ import { getAdminById } from './handlers/getAdminById';
 import { getUserById } from './handlers/getUserById';
 import { getChoreById } from './handlers/getChoreById';
 import { getChoreListById } from './handlers/getChoreListById';
+import { createAdmin } from './handlers/createAdmin';
+import bodyParser from 'body-parser';
+import { createUser } from './handlers/createUser';
+import { createChoreList } from './handlers/createChoreList';
+import { createChore } from './handlers/createChore';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -31,6 +36,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
 const app = express();
 app.use(authMiddleware);
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
 
@@ -52,6 +58,14 @@ app.get('/users/:user_id', getUserById);
 app.get('/chores/:chore_id', getChoreById);
 
 app.get('/chorelists/:chore_list_id', getChoreListById);
+
+app.post('/admins', createAdmin);
+
+app.post('/users', createUser);
+
+app.post('/chorelists', createChoreList);
+
+app.post('/chores', createChore);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
