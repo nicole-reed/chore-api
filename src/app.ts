@@ -4,6 +4,10 @@ import { getUsers } from './handlers/getUsers';
 import { getAdmins } from './handlers/getAdmins';
 import { getChores } from './handlers/getChores';
 import { getChoreLists } from './handlers/getChoreLists';
+import { getAdminById } from './handlers/getAdminById';
+import { getUserById } from './handlers/getUserById';
+import { getChoreById } from './handlers/getChoreById';
+import { getChoreListById } from './handlers/getChoreListById';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -37,9 +41,17 @@ app.get('/users', getUsers);
 
 app.get('/admins', getAdmins);
 
-app.get('/choreLists', getChoreLists);
+app.get('/chorelists', getChoreLists);
 
 app.get('/chores', getChores);
+
+app.get('/admins/:admin_id', getAdminById);
+
+app.get('/users/:user_id', getUserById);
+
+app.get('/chores/:chore_id', getChoreById);
+
+app.get('/chorelists/:chore_list_id', getChoreListById);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

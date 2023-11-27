@@ -7,6 +7,14 @@ export const getChores = async (): Promise<Chore[]> => {
     const chores: unknown = await db.select('*').from('chores')
 
     return z.array(choreSchema).parse(chores)
-}
+};
 
-export const choresRepository = { getChores };
+export const getChoreById = async (chore_id: string): Promise<Chore> => {
+    const db = await getDb()
+    const chore: unknown[] = await db.select('*').from('chores').where('chore_id', chore_id)
+
+    return choreSchema.parse(chore[0])
+};
+
+
+export const choresRepository = { getChores, getChoreById };
