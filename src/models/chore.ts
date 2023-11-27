@@ -12,4 +12,10 @@ export const choreSchema = z.object({
     status: z.nativeEnum(Status)
 });
 
+export const getChoreByIdRequestSchema = z.object({
+    params: z.object({
+        chore_id: z.string()
+    })
+});
+
 export type Chore = z.infer<typeof choreSchema>

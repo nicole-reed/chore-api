@@ -7,4 +7,10 @@ export const userSchema = z.object({
     email: z.string()
 });
 
+export const getUserByIdRequestSchema = z.object({
+    params: z.object({
+        user_id: z.string()
+    })
+});
+
 export type User = z.infer<typeof userSchema>

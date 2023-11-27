@@ -11,4 +11,10 @@ export const choreListSchema = z.object({
     complete: z.boolean().default(false)
 });
 
+export const getChoreListByIdRequestSchema = z.object({
+    params: z.object({
+        chore_list_id: z.string()
+    })
+});
+
 export type ChoreList = z.infer<typeof choreListSchema>

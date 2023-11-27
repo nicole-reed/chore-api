@@ -10,4 +10,12 @@ export const getAdmins = async (): Promise<Admin[]> => {
     return z.array(adminSchema).parse(admins)
 }
 
-export const adminsRepository = { getAdmins };
+
+export const getAdminById = async (admin_id: string): Promise<Admin> => {
+    const db = await getDb()
+    const admin: unknown[] = await db.select('*').from('admins').where('admin_id', admin_id)
+
+    return adminSchema.parse(admin[0])
+}
+
+export const adminsRepository = { getAdmins, getAdminById };
