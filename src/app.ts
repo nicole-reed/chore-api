@@ -13,6 +13,10 @@ import bodyParser from 'body-parser';
 import { createUser } from './handlers/createUser';
 import { createChoreList } from './handlers/createChoreList';
 import { createChore } from './handlers/createChore';
+import { updateAdmin } from './handlers/updateAdmin';
+import { updateUser } from './handlers/updateUser';
+import { updateChoreList } from './handlers/updateChoreList';
+import { updateChore } from './handlers/updateChore';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -66,6 +70,14 @@ app.post('/users', createUser);
 app.post('/chorelists', createChoreList);
 
 app.post('/chores', createChore);
+
+app.put('/admins/:admin_id', updateAdmin);
+
+app.put('/users/:user_id', updateUser);
+
+app.put('/chorelists/:chore_list_id', updateChoreList);
+
+app.put('/chores/:chore_id', updateChore);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

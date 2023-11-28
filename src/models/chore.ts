@@ -28,6 +28,20 @@ export const createChoreRequestSchema = z.object({
         value: z.string().optional(),
         status: z.nativeEnum(Status)
     })
+});
+
+export const updateChoreRequestSchema = z.object({
+    body: z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        assigned_to: z.string().optional(),
+        deadline: z.date().optional(),
+        value: z.string().optional(),
+        status: z.nativeEnum(Status)
+    }),
+    params: z.object({
+        chore_id: z.string()
+    })
 })
 
 export type Chore = z.infer<typeof choreSchema>

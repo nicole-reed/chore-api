@@ -19,4 +19,14 @@ export const createAdminRequestSchema = z.object({
     })
 });
 
+export const updateAdminRequestSchema = z.object({
+    body: z.object({
+        name: z.string(),
+        email: z.string()
+    }),
+    params: z.object({
+        admin_id: z.string()
+    })
+});
+
 export type Admin = z.infer<typeof adminSchema>
