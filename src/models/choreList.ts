@@ -29,4 +29,18 @@ export const createChoreListRequestSchema = z.object({
     })
 });
 
+export const updateChoreListRequestSchema = z.object({
+    body: z.object({
+        title: z.string(),
+        assigned_to: z.string().optional(),
+        deadline: z.date().optional(),
+        value: z.string().optional(),
+        notes: z.string().optional(),
+        complete: z.boolean().default(false)
+    }),
+    params: z.object({
+        chore_list_id: z.string()
+    })
+});
+
 export type ChoreList = z.infer<typeof choreListSchema>

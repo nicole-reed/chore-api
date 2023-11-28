@@ -21,4 +21,14 @@ export const createUserRequestSchema = z.object({
     })
 });
 
+export const updateUserRequestSchema = z.object({
+    body: z.object({
+        name: z.string(),
+        email: z.string()
+    }),
+    params: z.object({
+        user_id: z.string()
+    })
+});
+
 export type User = z.infer<typeof userSchema>

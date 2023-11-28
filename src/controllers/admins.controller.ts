@@ -1,4 +1,4 @@
-import { adminSchema, createAdminRequestSchema, getAdminByIdRequestSchema } from "../models/admin";
+import { adminSchema, createAdminRequestSchema, getAdminByIdRequestSchema, updateAdminRequestSchema } from "../models/admin";
 import { HttpResponse } from "../models/httpResponse";
 import { adminsRepository } from "../repositories/admins.repository";
 
@@ -30,7 +30,20 @@ export const createAdmin = async (request: unknown): Promise<HttpResponse> => {
     return {
         body: admin,
         status: 200
-    }
-}
+    };
+};
 
-export const adminsController = { getAdmins, getAdminById, createAdmin };
+export const updateAdmin = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = updateAdminRequestSchema.parse(request)
+    const { name, email } = validatedRequest.body
+    const admin_id = validatedRequest.params.admin_id
+
+    const admin = await adminsRepository.updateAdmin(admin_id, name, email)
+
+    return {
+        body: admin,
+        status: 200
+    };
+};
+
+export const adminsController = { getAdmins, getAdminById, createAdmin, updateAdmin };

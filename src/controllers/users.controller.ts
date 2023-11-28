@@ -1,5 +1,5 @@
 import { HttpResponse } from "../models/httpResponse";
-import { createUserRequestSchema, getUserByIdRequestSchema } from "../models/user";
+import { createUserRequestSchema, getUserByIdRequestSchema, updateUserRequestSchema } from "../models/user";
 import { usersRepository } from "../repositories/users.repository";
 
 export const getUsers = async (): Promise<HttpResponse> => {
@@ -30,7 +30,20 @@ export const createUser = async (request: unknown): Promise<HttpResponse> => {
     return {
         body: user,
         status: 200
-    }
-}
+    };
+};
 
-export const usersController = { getUsers, getUserById, createUser };
+export const updateUser = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = updateUserRequestSchema.parse(request)
+    const { name, email } = validatedRequest.body
+    const user_id = validatedRequest.params.user_id
+
+    const user = await usersRepository.updateUser(user_id, name, email)
+
+    return {
+        body: user,
+        status: 200
+    };
+};
+
+export const usersController = { getUsers, getUserById, createUser, updateUser };
