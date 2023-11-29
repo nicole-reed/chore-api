@@ -17,6 +17,10 @@ import { updateAdmin } from './handlers/updateAdmin';
 import { updateUser } from './handlers/updateUser';
 import { updateChoreList } from './handlers/updateChoreList';
 import { updateChore } from './handlers/updateChore';
+import { deleteAdmin } from './handlers/deleteAdmin';
+import { deleteUser } from './handlers/deleteUser';
+import { deleteChore } from './handlers/deleteChore';
+import { deleteChoreList } from './handlers/deleteChoreList';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -78,6 +82,14 @@ app.put('/users/:user_id', updateUser);
 app.put('/chorelists/:chore_list_id', updateChoreList);
 
 app.put('/chores/:chore_id', updateChore);
+
+app.delete('/admins/:admin_id', deleteAdmin);
+
+app.delete('/users/:user_id', deleteUser);
+
+app.delete('/chores/:chore_id', deleteChore);
+
+app.delete('/chorelists/:chore_list_id', deleteChoreList);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

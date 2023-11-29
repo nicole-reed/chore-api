@@ -32,9 +32,14 @@ export const updateChoreList = async (chore_list_id: string, input: UpdateChoreL
         .update({ title, assigned_to, deadline, value, notes, complete }, ['chore_list_id', 'admin_id', 'title', 'assigned_to', 'deadline', 'value', 'notes', 'complete'])
 
     return choreListSchema.parse(choreList[0])
-}
+};
 
-export const choreListsRepository = { getChoreLists, getChoreListById, createChoreList, updateChoreList };
+export const deleteChoreList = async (chore_list_id: string): Promise<void> => {
+    const db = await getDb()
+    await db('chore_lists').where({ chore_list_id }).del()
+};
+
+export const choreListsRepository = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList };
 
 type CreateChoreListInput = {
     admin_id: string,

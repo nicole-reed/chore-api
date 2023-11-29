@@ -31,4 +31,10 @@ export const updateUserRequestSchema = z.object({
     })
 });
 
+export const deleteUserRequestSchema = z.object({
+    params: z.object({
+        user_id: z.string()
+    })
+});
+
 export type User = z.infer<typeof userSchema>

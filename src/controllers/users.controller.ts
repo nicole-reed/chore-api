@@ -1,5 +1,5 @@
 import { HttpResponse } from "../models/httpResponse";
-import { createUserRequestSchema, getUserByIdRequestSchema, updateUserRequestSchema } from "../models/user";
+import { createUserRequestSchema, deleteUserRequestSchema, getUserByIdRequestSchema, updateUserRequestSchema } from "../models/user";
 import { usersRepository } from "../repositories/users.repository";
 
 export const getUsers = async (): Promise<HttpResponse> => {
@@ -46,4 +46,16 @@ export const updateUser = async (request: unknown): Promise<HttpResponse> => {
     };
 };
 
-export const usersController = { getUsers, getUserById, createUser, updateUser };
+export const deleteUser = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = deleteUserRequestSchema.parse(request)
+    const user_id = validatedRequest.params.user_id
+
+    await usersRepository.deleteUser(user_id)
+
+    return {
+        body: `successfully deleted user: ${user_id}`,
+        status: 200
+    }
+};
+
+export const usersController = { getUsers, getUserById, createUser, updateUser, deleteUser };

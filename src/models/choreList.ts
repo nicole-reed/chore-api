@@ -43,4 +43,10 @@ export const updateChoreListRequestSchema = z.object({
     })
 });
 
+export const deleteChoreListRequestSchema = z.object({
+    params: z.object({
+        chore_list_id: z.string()
+    })
+});
+
 export type ChoreList = z.infer<typeof choreListSchema>

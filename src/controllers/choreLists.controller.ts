@@ -1,5 +1,5 @@
 
-import { createChoreListRequestSchema, getChoreListByIdRequestSchema, updateChoreListRequestSchema } from "../models/choreList";
+import { createChoreListRequestSchema, deleteChoreListRequestSchema, getChoreListByIdRequestSchema, updateChoreListRequestSchema } from "../models/choreList";
 import { HttpResponse } from "../models/httpResponse";
 import { choreListsRepository } from "../repositories/choreLists.repository";
 
@@ -57,4 +57,16 @@ export const updateChoreList = async (request: unknown): Promise<HttpResponse> =
     };
 };
 
-export const choreListsController = { getChoreLists, getChoreListById, createChoreList, updateChoreList };
+export const deleteChoreList = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = deleteChoreListRequestSchema.parse(request)
+    const chore_list_id = validatedRequest.params.chore_list_id
+
+    await choreListsRepository.deleteChoreList(chore_list_id)
+
+    return {
+        body: `successfully deleted chore_list: ${chore_list_id}`,
+        status: 200
+    }
+};
+
+export const choreListsController = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList };

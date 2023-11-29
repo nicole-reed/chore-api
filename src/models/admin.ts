@@ -29,4 +29,10 @@ export const updateAdminRequestSchema = z.object({
     })
 });
 
+export const deleteAdminRequestSchema = z.object({
+    params: z.object({
+        admin_id: z.string()
+    })
+});
+
 export type Admin = z.infer<typeof adminSchema>
