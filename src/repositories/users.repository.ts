@@ -28,6 +28,11 @@ export const updateUser = async (user_id: string, name: string, email: string): 
     const user: unknown[] = await db('users').where({ user_id }).update({ name, email }, ['user_id', 'admin_id', 'name', 'email'])
 
     return userSchema.parse(user[0])
-}
+};
 
-export const usersRepository = { getUsers, getUserById, createUser, updateUser };
+export const deleteUser = async (user_id: string): Promise<void> => {
+    const db = await getDb()
+    await db('users').where({ user_id }).del()
+};
+
+export const usersRepository = { getUsers, getUserById, createUser, updateUser, deleteUser };

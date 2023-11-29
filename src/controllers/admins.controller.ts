@@ -1,4 +1,4 @@
-import { adminSchema, createAdminRequestSchema, getAdminByIdRequestSchema, updateAdminRequestSchema } from "../models/admin";
+import { adminSchema, createAdminRequestSchema, deleteAdminRequestSchema, getAdminByIdRequestSchema, updateAdminRequestSchema } from "../models/admin";
 import { HttpResponse } from "../models/httpResponse";
 import { adminsRepository } from "../repositories/admins.repository";
 
@@ -46,4 +46,16 @@ export const updateAdmin = async (request: unknown): Promise<HttpResponse> => {
     };
 };
 
-export const adminsController = { getAdmins, getAdminById, createAdmin, updateAdmin };
+export const deleteAdmin = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = deleteAdminRequestSchema.parse(request)
+    const admin_id = validatedRequest.params.admin_id
+
+    await adminsRepository.deleteAdmin(admin_id)
+
+    return {
+        body: `deleted admin with admin_id: ${admin_id}`,
+        status: 200
+    }
+}
+
+export const adminsController = { getAdmins, getAdminById, createAdmin, updateAdmin, deleteAdmin };

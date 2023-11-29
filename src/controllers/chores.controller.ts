@@ -1,4 +1,4 @@
-import { createChoreRequestSchema, getChoreByIdRequestSchema, updateChoreRequestSchema } from "../models/chore";
+import { createChoreRequestSchema, deleteChoreRequestSchema, getChoreByIdRequestSchema, updateChoreRequestSchema } from "../models/chore";
 import { HttpResponse } from "../models/httpResponse";
 import { choresRepository } from "../repositories/chores.repository";
 
@@ -57,4 +57,16 @@ export const updateChore = async (request: unknown): Promise<HttpResponse> => {
     }
 };
 
-export const choresController = { getChores, getChoreById, createChore, updateChore };
+export const deleteChore = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = deleteChoreRequestSchema.parse(request)
+    const chore_id = validatedRequest.params.chore_id
+
+    await choresRepository.deleteChore(chore_id)
+
+    return {
+        body: `successfully deleted chore: ${chore_id}`,
+        status: 200
+    }
+};
+
+export const choresController = { getChores, getChoreById, createChore, updateChore, deleteChore };

@@ -30,6 +30,11 @@ export const updateAdmin = async (admin_id: string, name: string, email: string)
     const admin: unknown[] = await db('admins').where({ admin_id }).update({ name, email }, ['admin_id', 'name', 'email'])
 
     return adminSchema.parse(admin[0])
-}
+};
 
-export const adminsRepository = { getAdmins, getAdminById, createAdmin, updateAdmin };
+export const deleteAdmin = async (admin_id: string): Promise<void> => {
+    const db = await getDb()
+    await db('admins').where({ admin_id }).del()
+};
+
+export const adminsRepository = { getAdmins, getAdminById, createAdmin, updateAdmin, deleteAdmin };
