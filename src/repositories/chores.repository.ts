@@ -17,6 +17,20 @@ export const getChoreById = async (chore_id: string): Promise<Chore> => {
     return choreSchema.parse(chore[0])
 };
 
+export const getChoresByAdminId = async (admin_id: string): Promise<Chore[]> => {
+    const db = await getDb()
+    const chores: unknown = await db.select('*').from('chores').where('admin_id', admin_id)
+
+    return z.array(choreSchema).parse(chores)
+};
+
+export const getChoresByAssignedTo = async (user_id: string): Promise<Chore[]> => {
+    const db = await getDb()
+    const chores: unknown = await db.select('*').from('chores').where('assigned_to', user_id)
+
+    return z.array(choreSchema).parse(chores)
+};
+
 export const createChore = async (input: CreateChoreInput): Promise<Chore> => {
     const { admin_id, title, status } = input
     const db = await getDb()
@@ -43,7 +57,7 @@ export const deleteChore = async (chore_id: string): Promise<void> => {
 };
 
 
-export const choresRepository = { getChores, getChoreById, createChore, updateChore, deleteChore };
+export const choresRepository = { getChores, getChoreById, createChore, updateChore, deleteChore, getChoresByAdminId, getChoresByAssignedTo };
 
 type CreateChoreInput = {
     admin_id: string,

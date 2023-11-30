@@ -9,6 +9,20 @@ export const getChoreLists = async (): Promise<ChoreList[]> => {
     return z.array(choreListSchema).parse(choreLists)
 };
 
+export const getChoreListsByAdminId = async (admin_id: string): Promise<ChoreList[]> => {
+    const db = await getDb()
+    const choreLists: unknown = await db.select('*').from('chore_lists').where('admin_id', admin_id)
+
+    return z.array(choreListSchema).parse(choreLists)
+};
+
+export const getChoreListsByAssignedTo = async (user_id: string): Promise<ChoreList[]> => {
+    const db = await getDb()
+    const choreLists: unknown = await db.select('*').from('chore_lists').where('assigned_to', user_id)
+
+    return z.array(choreListSchema).parse(choreLists)
+};
+
 export const getChoreListById = async (chore_list_id: string): Promise<ChoreList> => {
     const db = await getDb()
     const choreList: unknown[] = await db.select('*').from('chore_lists').where('chore_list_id', chore_list_id)
@@ -39,7 +53,7 @@ export const deleteChoreList = async (chore_list_id: string): Promise<void> => {
     await db('chore_lists').where({ chore_list_id }).del()
 };
 
-export const choreListsRepository = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList };
+export const choreListsRepository = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList, getChoreListsByAdminId, getChoreListsByAssignedTo };
 
 type CreateChoreListInput = {
     admin_id: string,

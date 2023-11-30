@@ -13,6 +13,12 @@ export const getUserByIdRequestSchema = z.object({
     })
 });
 
+export const getUsersByAdminIdRequestSchema = z.object({
+    params: z.object({
+        admin_id: z.string()
+    })
+})
+
 export const createUserRequestSchema = z.object({
     body: z.object({
         admin_id: z.string(),
