@@ -16,6 +16,13 @@ export const getUserById = async (user_id: string): Promise<User> => {
     return userSchema.parse(user[0])
 };
 
+export const getUsersByAdminId = async (admin_id: string): Promise<User[]> => {
+    const db = await getDb()
+    const users: unknown = await db.select('*').from('users').where('admin_id', admin_id)
+
+    return z.array(userSchema).parse(users)
+}
+
 export const createUser = async (admin_id: string, name: string, email: string): Promise<User> => {
     const db = await getDb()
     const user: unknown[] = await db('users').returning(['user_id', 'admin_id', 'name', 'email']).insert({ admin_id, name, email })
@@ -35,4 +42,4 @@ export const deleteUser = async (user_id: string): Promise<void> => {
     await db('users').where({ user_id }).del()
 };
 
-export const usersRepository = { getUsers, getUserById, createUser, updateUser, deleteUser };
+export const usersRepository = { getUsers, getUserById, createUser, updateUser, deleteUser, getUsersByAdminId };

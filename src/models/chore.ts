@@ -18,6 +18,18 @@ export const getChoreByIdRequestSchema = z.object({
     })
 });
 
+export const getChoresByAdminIdRequestSchema = z.object({
+    params: z.object({
+        admin_id: z.string()
+    })
+});
+
+export const getChoresByAssignedToRequestSchema = z.object({
+    params: z.object({
+        user_id: z.string()
+    })
+});
+
 export const createChoreRequestSchema = z.object({
     body: z.object({
         admin_id: z.string(),

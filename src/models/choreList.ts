@@ -17,6 +17,18 @@ export const getChoreListByIdRequestSchema = z.object({
     })
 });
 
+export const getChoreListsByAdminIdRequestSchema = z.object({
+    params: z.object({
+        admin_id: z.string()
+    })
+});
+
+export const getChoreListsByAssignedToRequestSchema = z.object({
+    params: z.object({
+        user_id: z.string()
+    })
+});
+
 export const createChoreListRequestSchema = z.object({
     body: z.object({
         admin_id: z.string(),

@@ -1,11 +1,33 @@
 
-import { createChoreListRequestSchema, deleteChoreListRequestSchema, getChoreListByIdRequestSchema, updateChoreListRequestSchema } from "../models/choreList";
+import { createChoreListRequestSchema, deleteChoreListRequestSchema, getChoreListByIdRequestSchema, getChoreListsByAdminIdRequestSchema, getChoreListsByAssignedToRequestSchema, updateChoreListRequestSchema } from "../models/choreList";
 import { HttpResponse } from "../models/httpResponse";
 import { choreListsRepository } from "../repositories/choreLists.repository";
 
 
 export const getChoreLists = async (): Promise<HttpResponse> => {
     const choreLists = await choreListsRepository.getChoreLists();
+
+    return {
+        body: choreLists,
+        status: 200
+    };
+};
+
+export const getChoreListsByAdminId = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = getChoreListsByAdminIdRequestSchema.parse(request)
+    const admin_id = validatedRequest.params.admin_id
+    const choreLists = await choreListsRepository.getChoreListsByAdminId(admin_id)
+
+    return {
+        body: choreLists,
+        status: 200
+    };
+};
+
+export const getChoreListsByAssignedTo = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = getChoreListsByAssignedToRequestSchema.parse(request)
+    const user_id = validatedRequest.params.user_id
+    const choreLists = await choreListsRepository.getChoreListsByAssignedTo(user_id)
 
     return {
         body: choreLists,
@@ -69,4 +91,4 @@ export const deleteChoreList = async (request: unknown): Promise<HttpResponse> =
     }
 };
 
-export const choreListsController = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList };
+export const choreListsController = { getChoreLists, getChoreListById, createChoreList, updateChoreList, deleteChoreList, getChoreListsByAdminId, getChoreListsByAssignedTo };

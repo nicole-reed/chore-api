@@ -21,6 +21,11 @@ import { deleteAdmin } from './handlers/deleteAdmin';
 import { deleteUser } from './handlers/deleteUser';
 import { deleteChore } from './handlers/deleteChore';
 import { deleteChoreList } from './handlers/deleteChoreList';
+import { getUsersByAdminId } from './handlers/getUsersByAdminId';
+import { getChoresByAdminId } from './handlers/getChoresByAdminId';
+import { getChoreListsByAdminId } from './handlers/getChoreListsByAdminId';
+import { getChoresByAssignedTo } from './handlers/getChoresByAssignedTo';
+import { getChoreListsByAssignedTo } from './handlers/getChoreListsByAssignedTo';
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -61,11 +66,22 @@ app.get('/chores', getChores);
 
 app.get('/admins/:admin_id', getAdminById);
 
-app.get('/users/:user_id', getUserById);
+app.get('/admins/:admin_id/users', getUsersByAdminId);
+
+app.get('/admins/:admin_id/chores', getChoresByAdminId);
+
+app.get('/admins/:admin_id/chorelists', getChoreListsByAdminId);
 
 app.get('/chores/:chore_id', getChoreById);
 
+app.get('/users/:user_id/chores', getChoresByAssignedTo);
+
+app.get('/users/:user_id/chorelists', getChoreListsByAssignedTo);
+
 app.get('/chorelists/:chore_list_id', getChoreListById);
+
+app.get('/users/:user_id', getUserById);
+
 
 app.post('/admins', createAdmin);
 
@@ -75,6 +91,7 @@ app.post('/chorelists', createChoreList);
 
 app.post('/chores', createChore);
 
+
 app.put('/admins/:admin_id', updateAdmin);
 
 app.put('/users/:user_id', updateUser);
@@ -83,6 +100,7 @@ app.put('/chorelists/:chore_list_id', updateChoreList);
 
 app.put('/chores/:chore_id', updateChore);
 
+
 app.delete('/admins/:admin_id', deleteAdmin);
 
 app.delete('/users/:user_id', deleteUser);
@@ -90,6 +108,8 @@ app.delete('/users/:user_id', deleteUser);
 app.delete('/chores/:chore_id', deleteChore);
 
 app.delete('/chorelists/:chore_list_id', deleteChoreList);
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

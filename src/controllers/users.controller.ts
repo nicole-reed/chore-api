@@ -1,5 +1,5 @@
 import { HttpResponse } from "../models/httpResponse";
-import { createUserRequestSchema, deleteUserRequestSchema, getUserByIdRequestSchema, updateUserRequestSchema } from "../models/user";
+import { createUserRequestSchema, deleteUserRequestSchema, getUserByIdRequestSchema, getUsersByAdminIdRequestSchema, updateUserRequestSchema } from "../models/user";
 import { usersRepository } from "../repositories/users.repository";
 
 export const getUsers = async (): Promise<HttpResponse> => {
@@ -10,6 +10,17 @@ export const getUsers = async (): Promise<HttpResponse> => {
         status: 200
     };
 };
+
+export const getUsersByAdminId = async (request: unknown): Promise<HttpResponse> => {
+    const validatedRequest = getUsersByAdminIdRequestSchema.parse(request)
+    const admin_id = validatedRequest.params.admin_id
+    const users = await usersRepository.getUsersByAdminId(admin_id)
+
+    return {
+        body: users,
+        status: 200
+    }
+}
 
 export const getUserById = async (request: unknown): Promise<HttpResponse> => {
     const validatedRequest = getUserByIdRequestSchema.parse(request)
@@ -58,4 +69,4 @@ export const deleteUser = async (request: unknown): Promise<HttpResponse> => {
     }
 };
 
-export const usersController = { getUsers, getUserById, createUser, updateUser, deleteUser };
+export const usersController = { getUsers, getUserById, createUser, updateUser, deleteUser, getUsersByAdminId };
