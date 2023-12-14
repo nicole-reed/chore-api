@@ -15,7 +15,8 @@ export const getChores = async (): Promise<HttpResponse> => {
 export const getChoresByAdminId = async (request: unknown): Promise<HttpResponse> => {
     const validatedRequest = getChoresByAdminIdRequestSchema.parse(request)
     const admin_id = validatedRequest.params.admin_id
-    const chores = await choresRepository.getChoresByAdminId(admin_id)
+    const { assigned_to, status, deadline } = validatedRequest.query
+    const chores = await choresRepository.getChoresByAdminId({ admin_id, assigned_to, status, deadline })
 
     return {
         body: chores,
@@ -23,10 +24,12 @@ export const getChoresByAdminId = async (request: unknown): Promise<HttpResponse
     };
 };
 
+
 export const getChoresByAssignedTo = async (request: unknown): Promise<HttpResponse> => {
     const validatedRequest = getChoresByAssignedToRequestSchema.parse(request)
     const user_id = validatedRequest.params.user_id
-    const chores = await choresRepository.getChoresByAssignedTo(user_id)
+    const { status, deadline } = validatedRequest.query
+    const chores = await choresRepository.getChoresByAssignedTo({ user_id, status, deadline })
 
     return {
         body: chores,
@@ -91,4 +94,12 @@ export const deleteChore = async (request: unknown): Promise<HttpResponse> => {
     }
 };
 
-export const choresController = { getChores, getChoreById, createChore, updateChore, deleteChore, getChoresByAdminId, getChoresByAssignedTo };
+export const choresController = {
+    getChores,
+    getChoreById,
+    createChore,
+    updateChore,
+    deleteChore,
+    getChoresByAdminId,
+    getChoresByAssignedTo
+};

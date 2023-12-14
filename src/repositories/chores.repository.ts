@@ -17,18 +17,46 @@ export const getChoreById = async (chore_id: string): Promise<Chore> => {
     return choreSchema.parse(chore[0])
 };
 
-export const getChoresByAdminId = async (admin_id: string): Promise<Chore[]> => {
-    const db = await getDb()
-    const chores: unknown = await db.select('*').from('chores').where('admin_id', admin_id)
+export const getChoresByAdminId = async (input: GetChoresByAdminIdInput): Promise<Chore[]> => {
+    const { admin_id, assigned_to, deadline, status } = input
+    let queryString = 'SELECT * FROM chores WHERE admin_id = ?'
+    const bindings = [admin_id]
+    if (assigned_to) {
+        queryString += ' AND assigned_to = ?'
+        bindings.push(assigned_to)
+    }
+    if (status) {
+        queryString += ' AND status = ?'
+        bindings.push(status)
+    }
+    if (deadline) {
+        queryString += ' AND deadline = ?'
+        bindings.push(deadline)
+    }
 
-    return z.array(choreSchema).parse(chores)
+    const db = await getDb()
+    const rawQueryResult: unknown = await db.raw(queryString, bindings)
+    const { rows } = z.object({ rows: z.array(choreSchema) }).parse(rawQueryResult)
+    return rows
 };
 
-export const getChoresByAssignedTo = async (user_id: string): Promise<Chore[]> => {
-    const db = await getDb()
-    const chores: unknown = await db.select('*').from('chores').where('assigned_to', user_id)
+export const getChoresByAssignedTo = async (input: GetChoresByAssignedToInput): Promise<Chore[]> => {
+    const { user_id, status, deadline } = input
+    let queryString = 'SELECT * FROM chores WHERE assigned_to = ?'
+    const bindings = [user_id]
+    if (status) {
+        queryString += ' AND status = ?'
+        bindings.push(status)
+    }
+    if (deadline) {
+        queryString += ' AND deadline = ?'
+        bindings.push(deadline)
+    }
 
-    return z.array(choreSchema).parse(chores)
+    const db = await getDb()
+    const rawQueryResult: unknown = await db.raw(queryString, bindings)
+    const { rows } = z.object({ rows: z.array(choreSchema) }).parse(rawQueryResult)
+    return rows
 };
 
 export const createChore = async (input: CreateChoreInput): Promise<Chore> => {
@@ -57,14 +85,22 @@ export const deleteChore = async (chore_id: string): Promise<void> => {
 };
 
 
-export const choresRepository = { getChores, getChoreById, createChore, updateChore, deleteChore, getChoresByAdminId, getChoresByAssignedTo };
+export const choresRepository = {
+    getChores,
+    getChoreById,
+    createChore,
+    updateChore,
+    deleteChore,
+    getChoresByAdminId,
+    getChoresByAssignedTo
+};
 
 type CreateChoreInput = {
     admin_id: string,
     title: string,
     description?: string,
     assigned_to?: string,
-    deadline?: Date,
+    deadline?: string,
     value?: string,
     status: Status
 }
@@ -73,7 +109,20 @@ type UpdateChoreInput = {
     title: string,
     description?: string,
     assigned_to?: string,
-    deadline?: Date,
+    deadline?: string,
     value?: string,
     status: Status
+}
+
+type GetChoresByAssignedToInput = {
+    user_id: string,
+    status?: Status,
+    deadline?: string
+}
+
+type GetChoresByAdminIdInput = {
+    admin_id: string,
+    assigned_to?: string,
+    status?: Status,
+    deadline?: string
 }
