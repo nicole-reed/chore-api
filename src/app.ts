@@ -26,6 +26,8 @@ import { getChoresByAdminId } from './handlers/getChoresByAdminId';
 import { getChoreListsByAdminId } from './handlers/getChoreListsByAdminId';
 import { getChoresByAssignedTo } from './handlers/getChoresByAssignedTo';
 import { getChoreListsByAssignedTo } from './handlers/getChoreListsByAssignedTo';
+import { types } from 'pg';
+
 
 const port = Number(process.env.PORT) || 8080;
 
@@ -46,6 +48,11 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
   }
 
 }
+
+const DATE_OID = 1082;
+const parseDate = (value: unknown) => value;
+
+types.setTypeParser(DATE_OID, parseDate);
 
 const app = express();
 app.use(authMiddleware);
@@ -81,7 +88,6 @@ app.get('/users/:user_id/chorelists', getChoreListsByAssignedTo);
 app.get('/chorelists/:chore_list_id', getChoreListById);
 
 app.get('/users/:user_id', getUserById);
-
 
 app.post('/admins', createAdmin);
 

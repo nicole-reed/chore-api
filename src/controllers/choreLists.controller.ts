@@ -16,7 +16,8 @@ export const getChoreLists = async (): Promise<HttpResponse> => {
 export const getChoreListsByAdminId = async (request: unknown): Promise<HttpResponse> => {
     const validatedRequest = getChoreListsByAdminIdRequestSchema.parse(request)
     const admin_id = validatedRequest.params.admin_id
-    const choreLists = await choreListsRepository.getChoreListsByAdminId(admin_id)
+    const { assigned_to, deadline, complete } = validatedRequest.query
+    const choreLists = await choreListsRepository.getChoreListsByAdminId({ admin_id, assigned_to, deadline, complete })
 
     return {
         body: choreLists,
@@ -27,7 +28,8 @@ export const getChoreListsByAdminId = async (request: unknown): Promise<HttpResp
 export const getChoreListsByAssignedTo = async (request: unknown): Promise<HttpResponse> => {
     const validatedRequest = getChoreListsByAssignedToRequestSchema.parse(request)
     const user_id = validatedRequest.params.user_id
-    const choreLists = await choreListsRepository.getChoreListsByAssignedTo(user_id)
+    const { deadline, complete } = validatedRequest.query
+    const choreLists = await choreListsRepository.getChoreListsByAssignedTo({ user_id, deadline, complete })
 
     return {
         body: choreLists,

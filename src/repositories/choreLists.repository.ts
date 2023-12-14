@@ -9,18 +9,44 @@ export const getChoreLists = async (): Promise<ChoreList[]> => {
     return z.array(choreListSchema).parse(choreLists)
 };
 
-export const getChoreListsByAdminId = async (admin_id: string): Promise<ChoreList[]> => {
+export const getChoreListsByAdminId = async (input: GetChoresListsByAdminIdInput): Promise<ChoreList[]> => {
+    const { admin_id, assigned_to, deadline, complete } = input
+    let queryString = 'SELECT * FROM chore_lists WHERE admin_id = ?'
+    const bindings = [admin_id]
+    if (assigned_to) {
+        queryString += ' AND assigned_to = ?'
+        bindings.push(assigned_to)
+    }
+    if (deadline) {
+        queryString += ' AND deadline = ?'
+        bindings.push(deadline)
+    }
+    if (complete) {
+        queryString += ' AND complete = ?'
+        bindings.push(complete)
+    }
     const db = await getDb()
-    const choreLists: unknown = await db.select('*').from('chore_lists').where('admin_id', admin_id)
-
-    return z.array(choreListSchema).parse(choreLists)
+    const rawQueryResult: unknown = await db.raw(queryString, bindings)
+    const { rows } = z.object({ rows: z.array(choreListSchema) }).parse(rawQueryResult)
+    return rows
 };
 
-export const getChoreListsByAssignedTo = async (user_id: string): Promise<ChoreList[]> => {
+export const getChoreListsByAssignedTo = async (input: GetChoresListsByAssignedToInput): Promise<ChoreList[]> => {
+    const { user_id, deadline, complete } = input
+    let queryString = 'SELECT * FROM chore_lists WHERE assigned_to = ?'
+    const bindings = [user_id]
+    if (deadline) {
+        queryString += ' AND deadline = ?'
+        bindings.push(deadline)
+    }
+    if (complete) {
+        queryString += ' AND complete = ?'
+        bindings.push(complete)
+    }
     const db = await getDb()
-    const choreLists: unknown = await db.select('*').from('chore_lists').where('assigned_to', user_id)
-
-    return z.array(choreListSchema).parse(choreLists)
+    const rawQueryResult: unknown = await db.raw(queryString, bindings)
+    const { rows } = z.object({ rows: z.array(choreListSchema) }).parse(rawQueryResult)
+    return rows
 };
 
 export const getChoreListById = async (chore_list_id: string): Promise<ChoreList> => {
@@ -59,7 +85,7 @@ type CreateChoreListInput = {
     admin_id: string,
     title: string,
     assigned_to?: string,
-    deadline?: Date,
+    deadline?: string,
     value?: string,
     notes?: string,
     complete?: boolean
@@ -68,8 +94,21 @@ type CreateChoreListInput = {
 type UpdateChoreListInput = {
     title: string,
     assigned_to?: string,
-    deadline?: Date,
+    deadline?: string,
     value?: string,
     notes?: string,
     complete?: boolean
+}
+
+type GetChoresListsByAdminIdInput = {
+    admin_id: string,
+    assigned_to?: string,
+    deadline?: string,
+    complete?: string
+}
+
+type GetChoresListsByAssignedToInput = {
+    user_id: string,
+    deadline?: string,
+    complete?: string
 }

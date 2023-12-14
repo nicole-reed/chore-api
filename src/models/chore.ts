@@ -7,7 +7,7 @@ export const choreSchema = z.object({
     title: z.string(),
     description: z.string().nullable(),
     assigned_to: z.string().nullable(),
-    deadline: z.date().nullable(),
+    deadline: z.string().nullable(),
     value: z.string().nullable(),
     status: z.nativeEnum(Status)
 });
@@ -21,12 +21,21 @@ export const getChoreByIdRequestSchema = z.object({
 export const getChoresByAdminIdRequestSchema = z.object({
     params: z.object({
         admin_id: z.string()
+    }),
+    query: z.object({
+        assigned_to: z.string().optional(),
+        status: z.nativeEnum(Status).optional(),
+        deadline: z.string().optional()
     })
 });
 
 export const getChoresByAssignedToRequestSchema = z.object({
     params: z.object({
         user_id: z.string()
+    }),
+    query: z.object({
+        status: z.nativeEnum(Status).optional(),
+        deadline: z.string().optional()
     })
 });
 
@@ -36,7 +45,7 @@ export const createChoreRequestSchema = z.object({
         title: z.string(),
         description: z.string().optional(),
         assigned_to: z.string().optional(),
-        deadline: z.date().optional(),
+        deadline: z.string().optional(),
         value: z.string().optional(),
         status: z.nativeEnum(Status)
     })
@@ -47,7 +56,7 @@ export const updateChoreRequestSchema = z.object({
         title: z.string(),
         description: z.string().optional(),
         assigned_to: z.string().optional(),
-        deadline: z.date().optional(),
+        deadline: z.string().optional(),
         value: z.string().optional(),
         status: z.nativeEnum(Status)
     }),
